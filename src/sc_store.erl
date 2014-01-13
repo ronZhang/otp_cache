@@ -21,8 +21,7 @@
 init()->ets:new(?TABLE_ID,[public,named_table]),
   ok.
 
-insert(Key,Pid)->
-	ets:insert(?TABLE_ID,{Key,Pid}).
+insert(Key,Pid)->ets:insert(?TABLE_ID,{Key,Pid}).
 
 
 delete(Pid)->ets:match_delete(?TABLE_ID,{'_',Pid}).

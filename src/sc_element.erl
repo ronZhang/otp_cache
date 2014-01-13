@@ -19,6 +19,7 @@
         delete/1]).
 
 
+
 -export([init/1,
 handle_call/3,
 handle_cast/2,
@@ -45,7 +46,7 @@ create(Value)->
   sc_sup:start_child(Value,?DEFAULT_LEAST_TIME).
 
 
-fetch(Pid)->gen_server:call(Pid,fetch).
+fetch(Pid)->gen_server:call([Pid,fetch]).
 
 
 
