@@ -12,31 +12,30 @@
 
 
 %% API
-
 -export([start/2,stop/1]).
-
 %%User API
 -export([insert/2,delete/1,lookup/1]).
 
 start(StartType,StartArgument)->
+  io:format("su_app:start() executing"),
   sc_store:init(),
   case  sc_sup:start_link() of
     {ok,PId}-> {ok,PId};
     Other -> {error,Other}
-  end,
-  io:format("su_app:start() executed")
-.
+  end.
+  
 
-  stop(State)-> ok .
+stop(State)-> ok .
+
 
 insert(Key,Value)->
-
   case sc_store:lookup(Key) of
     {ok,Pid} ->  sc_element:replace(Pid,Value);
     {error,not_found}->
       {ok,Pid}=sc_element:create(Value),
       sc_store:insert(Key,Pid)
   end.
+
 
 lookup(Key)->
    try
@@ -46,6 +45,7 @@ lookup(Key)->
    catch
      _Class:_Exception ->{error,not_found}
    end.
+
 
 delete(Key)->
    case sc_store:lookup(Key) of
