@@ -1,5 +1,6 @@
 {
-['src/*'],
+['src/*',
+'src/event/*'],
 [
     debug_info,
     {outdir,"ebin"},

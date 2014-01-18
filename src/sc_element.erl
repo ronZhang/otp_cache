@@ -39,14 +39,14 @@ start_link(Value,LeastTime)->
 
 %%提供给外部的API
 create(Value,LeastTime)->
-  sc_sup:start_child(Value,LeastTime).
+  sc_element_sup:start_child(Value,LeastTime).
 
 
 create(Value)->
-  sc_sup:start_child(Value,?DEFAULT_LEAST_TIME).
+  sc_element_sup:start_child(Value,?DEFAULT_LEAST_TIME).
 
 
-fetch(Pid)->gen_server:call([Pid,fetch]).
+fetch(Pid)->gen_server:call(Pid,fetch).
 
 
 
@@ -85,7 +85,7 @@ handle_call(fetch,_Form,State)->
   {reply,{ok,Value},State,TimeLeft}.
 
 
-handle_cast({replace,Value},State)->
+handle_cast([replace,Value],State)->
   #state{least_time = LeastTime,start_time = StartTime}=State,
   TimeLeft=time_left(StartTime,LeastTime),
   {noreply,State#state{value = Value},TimeLeft};

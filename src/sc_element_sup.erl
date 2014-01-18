@@ -6,38 +6,32 @@
 %%% @end
 %%% Created : 07. 十二月 2013 下午8:59
 %%%-------------------------------------------------------------------
--module(sc_sup).
+-module(sc_element_sup).
 -author("ron").
 -behaviour(supervisor).
 
 %% API
--export([start_link/0]).
+-export([start_link/0,start_child/2]).
 -export([init/1]).
 
 start_link()->
      supervisor:start_link({local,?MODULE},?MODULE,[]).
 
+start_child(Value,LastTime)->
+  supervisor:start_child(?MODULE,[Value,LastTime]).
+
+
 init([])->
   Element={
-    sc_element_sup,
-    {sc_element_sup,start_link,[]},
-    permanent,
-	2000,
+    sc_element,
+    {sc_element,start_link,[]},
+    temporary,
+    brutal_kill,
     worker,
-    [sc_element_sup]
+    [sc_element]
   },
-  Event={sc_event,
-		 {sc_event,start_link,[]},
-		 permanent,
-		 2000,
-		 worker,
-		 [sc_event]
-		 },
-  
-  
-  
-  Child=[Element,Event],
-  Strategy={one_for_one,4,36000},
+  Child=[Element],
+  Strategy={simple_one_for_one,0,1},
   {ok,{Strategy,Child}}
 .
 
